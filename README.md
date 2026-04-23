@@ -45,43 +45,41 @@ Workspace-First Architecture inverts the default assumption. Instead of deployin
 workspace-root/
 │
 ├── config/
-│   ├── workspace.json          # Workspace identity: name, version, registered agents,
-│   │                           # architect on record. Single source of workspace metadata.
-│   └── router.md               # Layer 1 dispatch table: signal → skill → output artifact.
-│                               # Defines routing rules and HITL gate sequence.
+│   ├── workspace.json              # Workspace identity: name, version, registered agents,
+│   │                               # architect on record. Single source of workspace metadata.
+│   └── router.md                   # Layer 1 dispatch table: signal → skill → output artifact.
+│                                   # Defines routing rules and HITL gate sequence.
 │
 ├── library/
-│   ├── skills/                 # Agent instruction files. Each skill defines:
-│   │   ├── pulse_strategist.md # Purpose, Input Contract, Output Contract, Constraints,
-│   │   ├── budget_check.md     # and Schema Reference. Skills are versioned here, not
-│   │   └── finops_agent.md     # embedded in prompts.
+│   ├── skills/                     # Agent instruction files. Each skill defines:
+│   │   └── {skill-name}.md         # Purpose, Input Contract, Output Contract, Constraints,
+│   │                               # and Schema Reference. Skills are versioned here, not
+│   │                               # embedded in prompts.
 │   │
-│   └── schemas/                # JSON Schema 2020-12 definitions for all structured
-│       ├── erp_verdict.schema.json     # agent outputs. Validation is mandatory before
-│       ├── cloud_spend.schema.json     # any agent writes to telemetry/.
-│       └── pulse_summary.schema.json
+│   └── schemas/                    # JSON Schema 2020-12 definitions for all structured
+│       ├── {signal}.schema.json    # agent outputs. Validation is mandatory before any
+│       └── pulse_summary.schema.json  # agent writes to telemetry/.
 │
 ├── projects/
 │   └── {project-key}/
-│       ├── state.json          # Mutable project state: run count, last verdicts,
-│       │                       # open/approved flags, baseline risk posture.
+│       ├── state.json              # Mutable project state: run count, last verdicts,
+│       │                           # open/approved flags, baseline risk posture.
 │       │
-│       ├── telemetry/          # Stage 1 — Agent output land here after schema validation.
-│       │   ├── erp_verdict.md  # Each file carries HITL front-matter (PENDING_REVIEW →
-│       │   ├── cloud_spend.md  # REVIEWED). Agents may not synthesize stale telemetry.
-│       │   └── itsm_state.md
+│       ├── telemetry/              # Stage 1 — Agent outputs land here after schema validation.
+│       │   └── {signal}.md         # Each file carries HITL front-matter (PENDING_REVIEW →
+│       │                           # REVIEWED). Agents may not synthesize stale telemetry.
 │       │
-│       ├── review/             # Stage 2 — Mandatory human gate. pulse_strategist is
-│       │   └── risk_flags.md   # blocked until status: APPROVED and approved_by is set.
+│       ├── review/                 # Stage 2 — Mandatory human gate. The synthesis skill is
+│       │   └── risk_flags.md       # blocked until status: APPROVED and approved_by is set.
 │       │
-│       ├── delivery/           # Stage 3 — Final governance artifact. Written only after
-│       │   └── pulse_summary.md # review gate passes. Locked post-approval.
+│       ├── delivery/               # Stage 3 — Final governance artifact. Written only after
+│       │   └── pulse_summary.md    # review gate passes. Locked post-approval.
 │       │
-│       └── archive/            # Superseded telemetry versions. Never deleted.
+│       └── archive/                # Superseded telemetry versions. Never deleted.
 │
 └── outputs/
-    ├── governance/             # Dropped signals, schema violations, state transition notices.
-    └── reports/                # Exported pulse summaries and audit packages.
+    ├── governance/                 # Dropped signals, schema violations, state transition notices.
+    └── reports/                    # Exported pulse summaries and audit packages.
 ```
 
 ---
@@ -116,7 +114,7 @@ For each agent capability in your pipeline:
 2. Add a JSON Schema for its output in `library/schemas/`.
 3. Register the agent in `workspace.json` under `registered_agents` with its `skill_ref` and `triggers`.
 4. Add a row to `config/router.md` mapping its trigger signal to its output artifact.
-5. Duplicate the `projects/demo-project/` folder for each project you onboard. Reset `state.json` to baseline values.
+5. Duplicate the `projects/servicenow-csm-demo/` folder for each project you onboard. Reset `state.json` to baseline values.
 
 The pipeline is ready to run. Agents execute against the workspace. The workspace enforces the rules.
 

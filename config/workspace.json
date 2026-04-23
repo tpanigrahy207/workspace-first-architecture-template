@@ -4,22 +4,10 @@
   "description": "Enterprise AI governance pipeline using the Workspace-First Architecture pattern. Each project runs telemetry, review, and delivery stages backed by structured HITL checkpoints.",
   "registered_agents": [
     {
-      "id": "pulse_strategist",
-      "skill_ref": "library/skills/pulse_strategist.md",
-      "role": "Synthesizes telemetry signals into a final risk posture and pulse summary narrative.",
-      "triggers": ["review_complete", "manual_pulse_request"]
-    },
-    {
-      "id": "budget_check",
-      "skill_ref": "library/skills/budget_check.md",
-      "role": "Pulls cloud spend actuals and compares against approved monthly budget thresholds.",
-      "triggers": ["cloud_spend_signal", "scheduled_daily"]
-    },
-    {
-      "id": "finops_agent",
-      "skill_ref": "library/skills/finops_agent.md",
-      "role": "Validates ERP financial setup for a project and emits a structured verdict.",
-      "triggers": ["project_onboard", "erp_change_event", "manual_erp_check"]
+      "id": "csm_pulse_strategist",
+      "skill_ref": "library/skills/csm_pulse_strategist.md",
+      "role": "Synthesizes normalized CSM telemetry from ServiceNow into a structured risk assessment and stakeholder-ready pulse summary.",
+      "triggers": ["csm_telemetry_update", "sla_breach_event", "review_complete", "manual_pulse_request"]
     }
   ],
   "created_at": "2026-04-23T00:00:00Z",

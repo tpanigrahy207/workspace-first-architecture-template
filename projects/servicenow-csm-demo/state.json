@@ -1,8 +1,8 @@
 {
-  "project_key": "demo-project",
+  "project_key": "servicenow-csm-demo",
   "last_run": null,
   "run_count": 0,
-  "last_erp_verdict": null,
+  "last_csm_verdict": null,
   "last_cloud_risk": null,
   "open_flags": 0,
   "approved_flags": 0,

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "workspace-first/pulse_summary",
   "title": "Pulse Summary",
-  "description": "Structured output produced by the pulse_strategist skill. The authoritative governance artifact for a pipeline run — synthesizes all telemetry signals into a final risk posture and recommended actions.",
+  "description": "Structured output produced by the csm_pulse_strategist skill. The authoritative governance artifact for a pipeline run — synthesizes all telemetry signals into a final risk posture and recommended actions.",
   "type": "object",
   "required": ["project_key", "generated_at", "risk_posture", "open_flags", "summary_narrative", "recommended_actions"],
   "additionalProperties": false,
@@ -27,16 +27,6 @@
       "description": "Number of unresolved risk flags at the time of pulse generation.",
       "minimum": 0
     },
-    "erp_verdict": {
-      "type": "string",
-      "description": "The ERP verdict at the time of this pulse run, for traceability.",
-      "enum": ["VERIFIED", "FINANCIAL_SETUP_REQUIRED", "INVALID"]
-    },
-    "cloud_status": {
-      "type": "string",
-      "description": "The cloud spend status at the time of this pulse run, for traceability.",
-      "enum": ["WITHIN_BUDGET", "OVERSPEND_DETECTED", "NO_DATA"]
-    },
     "summary_narrative": {
       "type": "string",
       "description": "Plain English narrative summarizing the project's current risk state. Must be grounded in actual telemetry values — no generic text. Minimum 50 characters.",
@@ -57,7 +47,7 @@
           },
           "action": {
             "type": "string",
-            "description": "Specific, actionable recommendation. Must name the responsible system or team.",
+            "description": "Specific, actionable recommendation. Must name the responsible case, account, or team.",
             "minLength": 10
           },
           "owner": {
@@ -70,23 +60,21 @@
   },
   "examples": [
     {
-      "project_key": "demo-project",
+      "project_key": "servicenow-csm-demo",
       "generated_at": "2026-04-23T09:00:00Z",
       "risk_posture": "HIGH",
       "open_flags": 2,
-      "erp_verdict": "VERIFIED",
-      "cloud_status": "OVERSPEND_DETECTED",
-      "summary_narrative": "ERP setup is verified with an active cost center and PO. However, cloud spend for April MTD is $12,480 against an approved budget of $10,000 — a 24.8% overrun. Two open risk flags remain unresolved from the ITSM queue. Immediate budget review and flag resolution are required before the next sprint cycle.",
+      "summary_narrative": "Two P1 cases (CS0012345 for Acme Corp, CS0012346 for Northstar Ltd) are in PENDING state with sla_status BREACHED. Both are resolution breaches with open_duration_hours exceeding 72 hours. Immediate escalation is required before next SLA review window.",
       "recommended_actions": [
         {
           "priority": "P1",
-          "action": "Initiate an emergency budget review with the FinOps team to reallocate or suppress $2,480 in overrun spend before month-end close.",
-          "owner": "FinOps Team"
+          "action": "Escalate CS0012345 (Acme Corp) to Tier 3 support — resolution SLA breached at 74 hours. Assign a named owner before end of business today.",
+          "owner": "CSM Escalation Team"
         },
         {
           "priority": "P1",
-          "action": "Resolve the two open ITSM flags (INC-20241 and INC-20243) — both are blocking the cloud resource cleanup task.",
-          "owner": "Platform Engineering"
+          "action": "Escalate CS0012346 (Northstar Ltd) to account manager for executive communication — resolution SLA breached at 81 hours with no update in 24 hours.",
+          "owner": "Account Management"
         }
       ]
     }
