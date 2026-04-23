@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "workspace-first/csm_case_state",
+  "title": "CSM Case State",
+  "description": "Structured telemetry output representing the current state of a ServiceNow CSM case. Produced by the csm_pulse_strategist skill and validated before writing to telemetry/csm_case_state.md.",
+  "type": "object",
+  "required": [
+    "project_key",
+    "source_platform",
+    "extracted_at",
+    "case_number",
+    "account_name",
+    "case_state",
+    "priority",
+    "sla_status",
+    "assigned_to",
+    "open_duration_hours"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "project_key": {
+      "type": "string",
+      "description": "Unique project identifier. Must match the key in state.json.",
+      "minLength": 1
+    },
+    "source_platform": {
+      "const": "servicenow",
+      "description": "The platform this case was extracted from. Fixed to 'servicenow' for this schema version."
+    },
+    "extracted_at": {
+      "type": "string",
+      "description": "ISO 8601 UTC timestamp of when this case state was extracted from ServiceNow.",
+      "format": "date-time"
+    },
+    "case_number": {
+      "type": "string",
+      "description": "ServiceNow case number (e.g., 'CS0012345').",
+      "minLength": 1
+    },
+    "account_name": {
+      "type": "string",
+      "description": "Name of the customer account associated with this case.",
+      "minLength": 1
+    },
+    "case_state": {
+      "type": "string",
+      "description": "Current lifecycle state of the case in ServiceNow.",
+      "enum": ["NEW", "IN_PROGRESS", "PENDING", "RESOLVED", "CLOSED"]
+    },
+    "priority": {
+      "type": "string",
+      "description": "Case priority as set in ServiceNow. P1 = Critical, P2 = High, P3 = Moderate, P4 = Low.",
+      "enum": ["P1", "P2", "P3", "P4"]
+    },
+    "sla_status": {
+      "type": "string",
+      "description": "Current SLA compliance status at the time of extraction.",
+      "enum": ["WITHIN_SLA", "AT_RISK", "BREACHED"]
+    },
+    "assigned_to": {
+      "type": "string",
+      "description": "The agent or team currently assigned to this case in ServiceNow.",
+      "minLength": 1
+    },
+    "open_duration_hours": {
+      "type": "number",
+      "description": "Total hours the case has been open, measured from creation time to extracted_at.",
+      "minimum": 0
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional. Free-form notes about this case state — escalation context, blockers, or reviewer observations."
+    }
+  }
+}
