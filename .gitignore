@@ -1,0 +1,10 @@
+# OS
+.DS_Store
+
+# Environment
+*.env
+
+# Generated outputs — preserve directory via .gitkeep
+/outputs/governance/*
+/outputs/reports/*
+!.gitkeep
